@@ -1,0 +1,8 @@
+services:
+  python:
+    build: .
+    container_name: proyecto-ml
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    command: tail -f /dev/null
