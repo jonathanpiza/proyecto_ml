@@ -1,0 +1,10 @@
+# Volumen compartido: el CronJob escribe aquí el modelo y los resultados; la API los lee.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: salida-pvc
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 200Mi

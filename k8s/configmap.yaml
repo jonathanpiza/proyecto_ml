@@ -1,0 +1,7 @@
+# Configuración del dashboard: dónde está la API dentro del clúster (el Service se llama "api").
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dashboard-config
+data:
+  API_URL: "http://api:8000"

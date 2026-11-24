@@ -1,0 +1,63 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+      - name: Revisar que el código compile
+        run: python -m compileall -q src api dashboard
+      - name: Probar el entrenamiento con datos de demostración
+        run: python src/train.py --demo --salida /tmp/salida
+      - name: Verificar los archivos generados
+        run: test -s /tmp/salida/modelo.joblib && test -s /tmp/salida/resultado.json
+
+  imagenes:
+    needs: pruebas
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - nombre: api
+            contexto: ./api
+            dockerfile: ./api/Dockerfile
+          - nombre: dashboard
+            contexto: ./dashboard
+            dockerfile: ./dashboard/Dockerfile
+          - nombre: train
+            contexto: .
+            dockerfile: ./Dockerfile.train
+    steps:
+      - uses: actions/checkout@v4
+      - name: Nombre del repositorio en minúsculas
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.contexto }}
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: |
+            ghcr.io/${{ env.REPO }}/${{ matrix.nombre }}:latest
+            ghcr.io/${{ env.REPO }}/${{ matrix.nombre }}:${{ github.sha }}

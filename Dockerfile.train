@@ -1,0 +1,9 @@
+# Imagen de ENTRENAMIENTO para Kubernetes (la usa el CronJob).
+# A diferencia del Dockerfile de la raíz, aquí el código y los datos van DENTRO de la imagen.
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY src ./src
+COPY data ./data
+ENTRYPOINT ["python", "src/train.py"]

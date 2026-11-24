@@ -1,0 +1,40 @@
+# Reentrenamiento automático: el día 1 de cada mes a las 2 a. m.
+# Para probarlo sin esperar al mes:  kubectl create job --from=cronjob/reentrenamiento prueba-1
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: reentrenamiento
+spec:
+  schedule: "0 2 1 * *"
+  concurrencyPolicy: Forbid                # nunca dos entrenamientos a la vez
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: train
+              image: prediccion-train:1.0
+              imagePullPolicy: IfNotPresent
+              # Ventas por producto. Para PQRS por tipo usa:
+              # args: ["--csv", "data/pqrs_demo.csv", "--fecha", "fecha_radicado", "--agg", "count",
+              #        "--grupo", "tipo", "--salida", "salida"]
+              args: ["--csv", "data/ventas_demo.csv", "--fecha", "fecha", "--valor", "monto",
+                     "--agg", "sum", "--grupo", "producto", "--salida", "salida"]
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 512Mi
+                limits:
+                  cpu: "1"
+                  memory: 1Gi
+              volumeMounts:
+                - name: salida
+                  mountPath: /app/salida
+          volumes:
+            - name: salida
+              persistentVolumeClaim:
+                claimName: salida-pvc

@@ -1,13 +1,5 @@
-FROM python:3.12-slim
-
-# Directorio de trabajo
+# Imagen para ENTRENAR (src/train.py). El código y los datos se montan desde docker-compose.yml.
+FROM python:3.11-slim
 WORKDIR /app
-
-# Copiar dependencias
 COPY requirements.txt .
-
-# Instalar dependencias
-RUN pip install --no-cache-dir --timeout=300 --retries=10 -r requirements.txt
-
-# Ejecutar aplicación
-CMD ["python"]
+RUN pip install --no-cache-dir --default-timeout=120 --retries 5 -r requirements.txt

@@ -1,0 +1,26 @@
+{
+  "mejor_modelo": "random_forest",
+  "modelo_usado": "random_forest",
+  "metricas_prueba": {
+    "ingenuo (repite mes anterior)": {
+      "MAE": 5091923.076923077,
+      "RMSE": 7493401.643189416,
+      "MAPE": 0.13744022833064187,
+      "R2": -0.8465715046272144
+    },
+    "lineal": {
+      "MAE": 5295057.633917015,
+      "RMSE": 6961599.056927767,
+      "MAPE": 0.13175021886354107,
+      "R2": -0.5937717377535487
+    },
+    "random_forest": {
+      "MAE": 4791946.5,
+      "RMSE": 5385608.662829873,
+      "MAPE": 0.12118481830761622,
+      "R2": 0.04615525204169901
+    }
+  },
+  "mes_predicho": "2026-11",
+  "prediccion": 40099138.0
+}

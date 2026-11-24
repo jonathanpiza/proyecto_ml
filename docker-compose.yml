@@ -1,8 +1,23 @@
 services:
-  python:
+  # Entrenamiento: no arranca con "docker compose up", solo cuando lo pides con "run".
+  ml:
     build: .
-    container_name: proyecto-ml
     volumes:
-      - .:/workspace
-    working_dir: /workspace
-    command: tail -f /dev/null
+      - .:/app
+    profiles: ["entrenamiento"]
+
+  api:
+    build: ./api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./salida:/app/salida:ro      # la API lee el modelo y los resultados de train.py
+
+  dashboard:
+    build: ./dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=http://api:8000      # dentro de la red de compose, la API se llama "api"
+    depends_on:
+      - api

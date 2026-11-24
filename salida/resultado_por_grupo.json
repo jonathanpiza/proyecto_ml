@@ -1,0 +1,33 @@
+{
+  "mes_predicho": "2026-11",
+  "grupos": {
+    "Accesorios": {
+      "mejor_modelo": "lineal",
+      "modelo_usado": "ingenuo (repite mes anterior)",
+      "MAPE_modelo": 0.145010207737891,
+      "MAPE_ingenuo": 0.14801255491050214,
+      "prediccion": 3738500.0
+    },
+    "Camisetas": {
+      "mejor_modelo": "random_forest",
+      "modelo_usado": "random_forest",
+      "MAPE_modelo": 0.09585372331620437,
+      "MAPE_ingenuo": 0.1778624001658463,
+      "prediccion": 5472447.0
+    },
+    "Pantalones": {
+      "mejor_modelo": "random_forest",
+      "modelo_usado": "random_forest",
+      "MAPE_modelo": 0.11208289723810197,
+      "MAPE_ingenuo": 0.1566456634645153,
+      "prediccion": 11030200.5
+    },
+    "Zapatos": {
+      "mejor_modelo": "random_forest",
+      "modelo_usado": "random_forest",
+      "MAPE_modelo": 0.16007899694057018,
+      "MAPE_ingenuo": 0.18834456336289807,
+      "prediccion": 18275990.5
+    }
+  }
+}
